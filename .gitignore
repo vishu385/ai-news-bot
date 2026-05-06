@@ -1,0 +1,12 @@
+# Seen articles cache
+seen_articles.json
+
+# Environment / secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/

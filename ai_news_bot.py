@@ -2,7 +2,8 @@ import feedparser
 import schedule
 import time
 import os
-from twilio.rest import Client
+import urllib.parse
+import urllib.request
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
@@ -10,10 +11,8 @@ import json
 # ============================================================
 # ⚙️  SETTINGS
 # ============================================================
-TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "AC0ce13d8b1545923ecb94d7a70b68932f")
-TWILIO_AUTH_TOKEN  = os.environ.get("TWILIO_AUTH_TOKEN",  "8d02cf41a818158505356a12b8600ca9")   # ⚠️ REGENERATE THIS!
-FROM_WHATSAPP      = "whatsapp:+14155238886"
-TO_WHATSAPP        = "whatsapp:+917505702806"
+CALLMEBOT_PHONE   = os.environ.get("CALLMEBOT_PHONE", "+91XXXXXXXXXX")  # E.g. +919876543210
+CALLMEBOT_API_KEY = os.environ.get("CALLMEBOT_API_KEY", "your_api_key_here")
 
 CHECK_EVERY_MINUTES = 15
 
@@ -115,15 +114,21 @@ def is_recent(entry, minutes=25):
 # 📤  WHATSAPP MESSAGING
 # ============================================================
 def send_whatsapp(message):
-    """Send a single WhatsApp message via the Twilio API."""
+    """Send a single WhatsApp message via CallMeBot API."""
+    if CALLMEBOT_API_KEY == "your_api_key_here" or CALLMEBOT_PHONE == "+91XXXXXXXXXX":
+        print("❌ Error: CallMeBot credentials not set!")
+        return
+
     try:
-        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        client.messages.create(
-            body=message,
-            from_=FROM_WHATSAPP,
-            to=TO_WHATSAPP,
-        )
-        print(f"[{datetime.now().strftime('%H:%M')}] ✅ Sent!")
+        encoded_msg = urllib.parse.quote(message)
+        url = f"https://api.callmebot.com/whatsapp.php?phone={CALLMEBOT_PHONE}&text={encoded_msg}&apikey={CALLMEBOT_API_KEY}"
+        
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as response:
+            if response.getcode() == 200:
+                print(f"[{datetime.now().strftime('%H:%M')}] ✅ Sent!")
+            else:
+                print(f"❌ Failed to send. HTTP Code: {response.getcode()}")
     except Exception as e:
         print(f"❌ Error: {e}")
 
@@ -193,7 +198,7 @@ def send_welcome():
 def run():
     print("=" * 45)
     print("🤖 AI News WhatsApp Bot Starting...")
-    print(f"📤 To: {TO_WHATSAPP}")
+    print(f"📤 To: {CALLMEBOT_PHONE}")
     print(f"⏰ Every: {CHECK_EVERY_MINUTES} min | Sources: {len(RSS_FEEDS)}")
     print("=" * 45)
 

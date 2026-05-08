@@ -11,8 +11,8 @@ import json
 # ============================================================
 # ⚙️  SETTINGS
 # ============================================================
-CALLMEBOT_PHONE   = os.environ.get("CALLMEBOT_PHONE", "+91XXXXXXXXXX")  # E.g. +919876543210
-CALLMEBOT_API_KEY = os.environ.get("CALLMEBOT_API_KEY", "your_api_key_here")
+CALLMEBOT_PHONE   = "+917505702806"  # 📞 Your WhatsApp number
+CALLMEBOT_API_KEY = "your_api_key_here"  # 🔑 Put the API Key you received on WhatsApp here!
 
 CHECK_EVERY_MINUTES = 15
 

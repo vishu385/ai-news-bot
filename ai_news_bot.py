@@ -11,7 +11,7 @@ import json
 # ============================================================
 # ⚙️  SETTINGS
 # ============================================================
-CALLMEBOT_PHONE   = "+917505702806"  # 📞 Your WhatsApp number
+CALLMEBOT_PHONE   = "your Number"  # 📞 Your WhatsApp number
 CALLMEBOT_API_KEY = "your_api_key_here"  # 🔑 Put the API Key you received on WhatsApp here!
 
 CHECK_EVERY_MINUTES = 15
